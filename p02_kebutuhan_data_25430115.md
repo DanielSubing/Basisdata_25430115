@@ -32,14 +32,14 @@
 
 ## 4. Aturan Bisnis (AB) - Minimal 8 Aturan
 * **AB-01 (Keunikan Identitas Akun):** Setiap akun pelanggan wajib menggunakan alamat email yang unik dan kata sandi disimpan dalam bentuk hash terenkripsi.
-* **AB-02 (Validitas Harga dan Stok):** Harga satuan produk dan sisa stok barang tidak boleh bernilai negatif (harus $\ge 0$).
+* **AB-02 (Validitas Harga dan Stok):** Harga satuan produk dan sisa stok barang tidak boleh bernilai negatif (harus >= 0).
 * **AB-03 (Klasifikasi Kategori):** Setiap produk wajib terhubung dengan minimal satu kategori barang aktif.
 * **AB-04 (Pemberian Nomor Pesanan):** Setiap transaksi pesanan baru wajib diberikan nomor transaksi yang unik dan otomatis tercatat tanggal/waktu pembuatannya.
 * **AB-05 (Pemesanan Berbasis Ketersediaan):** Jumlah kuantitas barang dalam Detail_Pesanan tidak boleh melebihi jumlah sisa stok produk yang tersedia di gudang.
 * **AB-06 (Otomatisasi Pemotongan Stok):** Ketika pesanan berhasil dibuat, sistem wajib langsung mengurangi kuantitas stok produk terkait sesuai jumlah pembelian secara atomik.
-* **AB-07 (Batas Waktu Pelunasan):** Pesanan yang tidak dilakukan konfirmasi pembayaran dalam waktu $1 \times 24$ jam akan dibatalkan otomatis dan stok dikembalikan (*restock*).
+* **AB-07 (Batas Waktu Pelunasan):** Pesanan yang tidak dilakukan konfirmasi pembayaran dalam waktu 1 x 24 jam akan dibatalkan otomatis dan stok dikembalikan (restock).
 * **AB-08 (Validasi Nominal Pembayaran):** Nominal pada entitas Pembayaran wajib bernilai sama persis dengan total tagihan pada entitas Pesanan.
-* **AB-09 (Syarat Ulasan Produk):** Pelanggan hanya diperbolehkan membuat ulasan pada produk yang status transaksinya sudah terverifikasi selesai (*completed*).
+* **AB-09 (Syarat Ulasan Produk):** Pelanggan hanya diperbolehkan membuat ulasan pada produk yang status transaksinya sudah terverifikasi selesai (completed).
 
 ---
 
@@ -47,7 +47,7 @@
 * **KI-01 (Katalog Produk Aktif):** Menampilkan daftar nama barang, harga, nama kategori, dan sisa stok yang siap dijual.
 * **KI-02 (Riwayat Belanja Pelanggan):** Menampilkan rekap histori pesanan per pelanggan lengkap dengan nomor nota, tanggal, status pelunasan, dan total biaya.
 * **KI-03 (Laporan Penjualan Harian/Bulanan):** Rekapitulasi omzet pemasukan toko dan total volume transaksi dalam periode tanggal tertentu untuk pemilik toko.
-* **KI-04 (Peringatan Stok Menipis):** Informasi daftar barang dengan persediaan stok di bawah batas ambang minimum ($\le 5$ unit) agar segera dilakukan restock.
+* **KI-04 (Peringatan Stok Menipis):** Informasi daftar barang dengan persediaan stok di bawah batas ambang minimum (<= 5 unit) agar segera dilakukan restock.
 * **KI-05 (Rata-rata Rating Produk):** Menghitung nilai rerata ulasan bintang (1-5) dan testimoni pelanggan pada halaman detail produk.
 
 ---
@@ -68,7 +68,7 @@
 
 ---
 
-## 7. Kamus Data Awal (20 Elemen dengan Penanggung Jawab)
+## 7. Kamus Data Awal (21 Elemen dengan Penanggung Jawab)
 
 | No | Nama Elemen Data | Tipe Data | Keterangan / Batasan | Penanggung Jawab |
 |---|---|---|---|---|
@@ -82,14 +82,14 @@
 | 8 | `nama_kategori` | VARCHAR(50) | Nama kelompok barang (mis: Aksesoris) | Admin Gudang |
 | 9 | `id_produk` | INT | Kunci utama barang | Admin Gudang |
 | 10 | `nama_produk` | VARCHAR(150) | Nama resmi barang dagangan | Admin Gudang |
-| 11 | `harga_satuan` | DECIMAL(12,2) | Nilai nominal rupiah barang ($\ge 0$) | Bagian Keuangan / Admin |
-| 12 | `stok_tersedia` | INT | Jumlah unit persediaan di gudang ($\ge 0$)| Admin Gudang |
+| 11 | `harga_satuan` | DECIMAL(12,2) | Nilai nominal rupiah barang (>= 0) | Bagian Keuangan / Admin |
+| 12 | `stok_tersedia` | INT | Jumlah unit persediaan di gudang (>= 0)| Admin Gudang |
 | 13 | `id_pesanan` | INT | Nomor unik faktur pesanan | Sistem Pemesanan |
 | 14 | `tanggal_pesanan` | DATETIME | Waktu transaksi dibuat otomatis | Sistem Pemesanan |
 | 15 | `total_tagihan` | DECIMAL(12,2) | Total nilai belanja yang harus dibayar | Sistem Pemesanan |
 | 16 | `status_pesanan` | VARCHAR(20) | Nilai: 'MENUNGGU', 'LUNAS', 'BATAL' | Sistem / Kasir |
-| 17 | `jumlah_beli` | INT | Banyaknya unit barang yang dibeli ($> 0$)| Pelanggan |
-| 18 | `subtotal_harga` | DECIMAL(12,2) | Perkalian jumlah beli $\times$ harga satuan| Sistem Pemesanan |
+| 17 | `jumlah_beli` | INT | Banyaknya unit barang yang dibeli (> 0)| Pelanggan |
+| 18 | `subtotal_harga` | DECIMAL(12,2) | Perkalian jumlah beli x harga satuan | Sistem Pemesanan |
 | 19 | `id_pembayaran` | INT | Kunci unik catatan pelunasan | Bagian Keuangan |
 | 20 | `metode_bayar` | VARCHAR(50) | Pilihan: 'TRANSFER_BANK', 'E_WALLET' | Pelanggan |
 | 21 | `nilai_rating` | INT | Bintang ulasan bernilai skala 1 hingga 5 | Pelanggan |
@@ -105,7 +105,7 @@
    * Sistem mampu beroperasi 24/7 dengan batas toleransi pemulihan kegagalan (*recovery*) maksimal 15 menit.
    * Transaksi pencatatan pesanan dan pemotongan stok wajib mematuhi standar ACID untuk menghindari selisih stok (*race condition*).
 3. **Performa (Performance):**
-   * Pemuatan katalog barang dan kueri pencarian wajib selesai dalam waktu $\le 500$ milidetik pada penggunaan normal.
+   * Pemuatan katalog barang dan kueri pencarian wajib selesai dalam waktu <= 500 milidetik pada penggunaan normal.
 
 ---
 
